@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "EarnFlow — Talk to DeFi",
+  title: "Shift — Your Savings, Supercharged",
   description:
-    "Voice-controlled yield deposits across 20+ chains. Say what you want, watch your money flow. Built with LI.FI.",
+    "A savings account powered by 20+ DeFi protocols across 60+ chains. One tap. Zero complexity. Built with LI.FI.",
 };
 
 export default function RootLayout({

@@ -60,14 +60,16 @@ export async function GET(req: NextRequest) {
     // - APY between 0.5% and 30% (sustainable range)
     // - Known protocols preferred
     const TRUSTED_PROTOCOLS = ["aave-v3", "morpho", "morpho-v1", "morpho-v2", "compound-v3", "euler-v2", "maple", "lido", "spark", "maker"];
+    const ESTABLISHED_CHAINS = [1, 42161, 10, 8453, 137, 56, 43114, 100, 534352, 59144]; // ETH, Arb, OP, Base, Poly, BSC, Avax, Gnosis, Scroll, Linea
 
     const ranked = matching
       .filter((v) => {
         if (!v.isTransactional) return false;
+        if (!ESTABLISHED_CHAINS.includes(v.chainId)) return false; // Only established chains
         const tvl = parseFloat(v.analytics?.tvl?.usd || "0");
         const apy = v.analytics?.apy?.total ?? v.analytics?.apy7d ?? 0;
         if (tvl < 1_000_000) return false;    // Min $1M TVL
-        if (apy > 30) return false;            // Cap at 30% (anything higher is risky)
+        if (apy > 30) return false;            // Cap at 30%
         if (apy < 0.5) return false;           // Min 0.5% APY
         return true;
       })
