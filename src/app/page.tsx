@@ -34,6 +34,12 @@ interface BestVault {
   apy: number;
   tvl: string;
   token: { symbol: string; address: string; decimals: number } | null;
+  safety?: {
+    score: number;
+    label: string;
+    trusted: boolean;
+    tvlFormatted: string;
+  };
 }
 
 // Kinetic number that smoothly animates
@@ -362,11 +368,26 @@ export default function Home() {
               </motion.p>
 
               {/* Best vault card */}
-              <motion.div initial={{ opacity: 0, y: 20, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 20 }} className="card-elevated mb-6 overflow-hidden">
+              <motion.div initial={{ opacity: 0, y: 20, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 20 }} className="card-elevated mb-5 overflow-hidden">
                 <div className="bg-gradient-to-br from-emerald-50 to-white p-6">
-                  <div className="mb-4 flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-amber-500" />
-                    <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-amber-600">Best yield found</p>
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-amber-500" />
+                      <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-amber-600">Best yield found</p>
+                    </div>
+                    {/* Safety badge */}
+                    {bestVault.safety && (
+                      <div className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-medium ${
+                        bestVault.safety.score >= 4
+                          ? "bg-emerald-100 text-emerald-700"
+                          : bestVault.safety.score >= 3
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-amber-100 text-amber-700"
+                      }`}>
+                        <Shield className="h-2.5 w-2.5" />
+                        {bestVault.safety.label}
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
@@ -378,6 +399,27 @@ export default function Home() {
                       <p className="text-[10px] text-zinc-400">APY</p>
                     </div>
                   </div>
+                  {/* Safety details */}
+                  {bestVault.safety && (
+                    <div className="mt-4 flex gap-3">
+                      <div className="flex-1 rounded-xl bg-white/60 px-3 py-2">
+                        <p className="text-[9px] text-zinc-400">TVL</p>
+                        <p className="text-[13px] font-semibold text-zinc-900">{bestVault.safety.tvlFormatted}</p>
+                      </div>
+                      <div className="flex-1 rounded-xl bg-white/60 px-3 py-2">
+                        <p className="text-[9px] text-zinc-400">Safety</p>
+                        <div className="mt-0.5 flex gap-0.5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <div key={i} className={`h-1.5 w-4 rounded-full ${i < bestVault.safety!.score ? "bg-emerald-500" : "bg-zinc-200"}`} />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex-1 rounded-xl bg-white/60 px-3 py-2">
+                        <p className="text-[9px] text-zinc-400">Protocol</p>
+                        <p className="text-[13px] font-semibold text-zinc-900">{bestVault.safety.trusted ? "Verified" : "Unverified"}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
 
@@ -520,7 +562,11 @@ export default function Home() {
                 </button>
               </motion.div>
 
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="mt-8 text-[10px] text-zinc-300">
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="mt-6 max-w-xs text-center text-[10px] leading-relaxed text-zinc-400">
+                Yield accrues on-chain 24/7 — you don&apos;t need to keep this open.
+                This counter shows real-time projections based on current APY.
+              </motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }} className="mt-3 text-[9px] text-zinc-300">
                 Powered by LI.FI Earn + Composer
               </motion.p>
             </motion.div>
