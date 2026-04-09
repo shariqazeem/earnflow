@@ -22,13 +22,13 @@ const config = createConfig({
     injected(),
   ],
   transports: {
-    [mainnet.id]: http(),
-    [arbitrum.id]: http(),
-    [optimism.id]: http(),
-    [base.id]: http(),
-    [polygon.id]: http(),
-    [bsc.id]: http(),
-    [avalanche.id]: http(),
+    [mainnet.id]: http("https://eth.llamarpc.com"),
+    [arbitrum.id]: http("https://arb1.arbitrum.io/rpc"),
+    [optimism.id]: http("https://mainnet.optimism.io"),
+    [base.id]: http("https://mainnet.base.org"),
+    [polygon.id]: http("https://polygon-rpc.com"),
+    [bsc.id]: http("https://bsc-dataseed.binance.org"),
+    [avalanche.id]: http("https://api.avax.network/ext/bc/C/rpc"),
   },
 });
 

@@ -1,4 +1,6 @@
-const EARN_BASE = "https://earn.li.fi";
+// Earn API proxied through our /api routes to avoid CORS
+const EARN_PROXY = "/api";
+const EARN_DIRECT = "https://earn.li.fi";
 const COMPOSER_BASE = "https://li.quest";
 
 function getComposerKey(): string {
@@ -49,13 +51,11 @@ export async function fetchAllVaults(): Promise<Vault[]> {
   const all: Vault[] = [];
   let cursor: string | undefined;
 
-  // Paginate through all vaults (up to 500 for performance)
   for (let page = 0; page < 5; page++) {
-    const url = new URL(`${EARN_BASE}/v1/earn/vaults`);
-    url.searchParams.set("limit", "100");
-    if (cursor) url.searchParams.set("cursor", cursor);
+    const params = new URLSearchParams({ limit: "100" });
+    if (cursor) params.set("cursor", cursor);
 
-    const res = await fetch(url.toString());
+    const res = await fetch(`${EARN_PROXY}/vaults?${params}`);
     if (!res.ok) break;
     const json = await res.json();
     const vaults = json.data ?? [];
@@ -71,11 +71,10 @@ export async function getVaultsPage(
   limit = 100,
   cursor?: string
 ): Promise<{ vaults: Vault[]; nextCursor?: string; total: number }> {
-  const url = new URL(`${EARN_BASE}/v1/earn/vaults`);
-  url.searchParams.set("limit", String(limit));
-  if (cursor) url.searchParams.set("cursor", cursor);
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (cursor) params.set("cursor", cursor);
 
-  const res = await fetch(url.toString());
+  const res = await fetch(`${EARN_PROXY}/vaults?${params}`);
   if (!res.ok) throw new Error(`Earn API error: ${res.status}`);
   const json = await res.json();
   return {
@@ -86,15 +85,14 @@ export async function getVaultsPage(
 }
 
 export async function getChains() {
-  const res = await fetch(`${EARN_BASE}/v1/earn/chains`);
+  // This is a rare call, use direct (server-side only) or proxy
+  const res = await fetch(`${EARN_DIRECT}/v1/earn/chains`);
   if (!res.ok) throw new Error(`Chains API error: ${res.status}`);
   return res.json();
 }
 
 export async function getPositions(address: string) {
-  const res = await fetch(
-    `${EARN_BASE}/v1/earn/portfolio/${address}/positions`
-  );
+  const res = await fetch(`${EARN_PROXY}/positions?address=${address}`);
   if (!res.ok) {
     if (res.status === 404) return [];
     throw new Error(`Positions API error: ${res.status}`);
