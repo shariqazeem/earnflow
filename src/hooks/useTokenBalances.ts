@@ -136,6 +136,11 @@ function getChainName(id: number): string {
     137: "Polygon",
     56: "BSC",
     43114: "Avalanche",
+    84532: "Base Sepolia",
+    11155111: "Sepolia",
+    421614: "Arb Sepolia",
+    11155420: "OP Sepolia",
+    80002: "Polygon Amoy",
   };
   return names[id] ?? `Chain ${id}`;
 }
