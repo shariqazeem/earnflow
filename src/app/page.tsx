@@ -510,6 +510,7 @@ export default function Home() {
 
   const [view, setView] = useState<View>("welcome");
   const [direction, setDirection] = useState(1);
+  const [positions, setPositions] = useState<{ vault: string; protocol: string; chain: string; balance: string; balanceUsd: number }[]>([]);
   const [vault, setVault] = useState<VaultInfo | null>(null);
   const [alternatives, setAlternatives] = useState<
     {
@@ -547,6 +548,30 @@ export default function Home() {
     if (isConnected && view === "welcome") navigateTo("savings");
     if (!isConnected && view !== "welcome") navigateTo("welcome");
   }, [isConnected, view, navigateTo]);
+
+  // Fetch real positions from LI.FI
+  useEffect(() => {
+    if (!address || !isConnected) return;
+    fetch(`/api/positions?address=${address}`)
+      .then((r) => r.ok ? r.json() : { data: [] })
+      .then((data) => {
+        const pos = (data.data ?? data ?? []).map((p: Record<string, unknown>) => {
+          const v = p.vault as Record<string, unknown> | undefined;
+          return {
+            vault: (v?.name as string) ?? "Vault",
+            protocol: ((v?.protocol as Record<string, unknown>)?.name as string) ?? "Unknown",
+            chain: (v?.network as string) ?? "Unknown",
+            balance: String(p.balance ?? "0"),
+            balanceUsd: Number(p.balanceUsd ?? 0),
+          };
+        });
+        setPositions(pos);
+        // Update earning amount from real positions
+        const totalUsd = pos.reduce((s: number, p: { balanceUsd: number }) => s + p.balanceUsd, 0);
+        if (totalUsd > 0) setEarningAmount(totalUsd);
+      })
+      .catch(() => {});
+  }, [address, isConnected]);
 
   useEffect(() => {
     if (depositor.status === "success") {
@@ -846,6 +871,47 @@ export default function Home() {
                   </p>
                 )}
               </motion.div>
+
+              {/* Active positions */}
+              {positions.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.12 }}
+                  className="mb-6"
+                >
+                  <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.08em] text-[#AEAEB2]">
+                    Active Positions
+                  </p>
+                  <div className="space-y-2">
+                    {positions.map((p, i) => (
+                      <motion.div
+                        key={`${p.protocol}-${p.chain}-${i}`}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.15 + i * 0.05 }}
+                        className="card flex items-center justify-between !rounded-2xl !p-4"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F0F0F2]">
+                            <TrendingUp className="h-5 w-5 text-[#6E6E73]" />
+                          </div>
+                          <div>
+                            <p className="text-[14px] font-semibold text-[#1D1D1F]">{p.protocol}</p>
+                            <p className="text-[11px] text-[#AEAEB2]">{p.vault} · {p.chain}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[14px] font-semibold text-[#1D1D1F] tabular">
+                            ${p.balanceUsd.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                          </p>
+                          <p className="text-[10px] text-[#AEAEB2]">earning</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
 
               {/* Horizontal token scroller */}
               <motion.div
