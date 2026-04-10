@@ -863,7 +863,16 @@ export default function Home() {
                       <p className="text-[13px] font-medium text-amber-900">Switch to mainnet</p>
                       <p className="text-[11px] text-amber-700">Yield is only available on mainnet chains</p>
                     </div>
-                    <button onClick={() => switchChain({ chainId: 1 })} className="rounded-full bg-amber-900 px-3 py-1.5 text-[11px] font-medium text-white">
+                    <button onClick={async () => {
+                      try {
+                        await switchChain({ chainId: 1 });
+                      } catch {
+                        try {
+                          const eth = (window as unknown as { ethereum?: { request: (args: { method: string; params: unknown[] }) => Promise<void> } }).ethereum;
+                          await eth?.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
+                        } catch { /* user rejected */ }
+                      }
+                    }} className="rounded-full bg-amber-900 px-3 py-1.5 text-[11px] font-medium text-white">
                       Switch
                     </button>
                   </motion.div>
