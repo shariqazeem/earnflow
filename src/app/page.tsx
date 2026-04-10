@@ -20,7 +20,7 @@ import {
   Sparkles,
   AlertCircle,
 } from "lucide-react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { useTokenBalances, type TokenInfo } from "@/hooks/useTokenBalances";
 import { useDeposit } from "@/hooks/useDeposit";
@@ -501,8 +501,11 @@ export default function Home() {
   const { address, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
-  const { tokens, isLoading: isLoadingTokens, chainName } = useTokenBalances();
+  const { tokens, isLoading: isLoadingTokens, chainName, chainId: currentChainId } = useTokenBalances();
   const depositor = useDeposit();
+  const { switchChain } = useSwitchChain();
+  const SUPPORTED_CHAINS = [1, 42161, 10, 8453, 137, 56, 43114];
+  const isTestnet = currentChainId ? !SUPPORTED_CHAINS.includes(currentChainId) : false;
   const { playDeposit, playSuccess } = useSound();
 
   const [view, setView] = useState<View>("welcome");
@@ -542,6 +545,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isConnected && view === "welcome") navigateTo("savings");
+    if (!isConnected && view !== "welcome") navigateTo("welcome");
   }, [isConnected, view, navigateTo]);
 
   useEffect(() => {
@@ -852,6 +856,18 @@ export default function Home() {
                 <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.08em] text-[#AEAEB2]">
                   Earn on · {chainName}
                 </p>
+
+                {isTestnet && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-4 flex items-center justify-between rounded-2xl bg-amber-50 px-4 py-3">
+                    <div>
+                      <p className="text-[13px] font-medium text-amber-900">Switch to mainnet</p>
+                      <p className="text-[11px] text-amber-700">Yield is only available on mainnet chains</p>
+                    </div>
+                    <button onClick={() => switchChain({ chainId: 1 })} className="rounded-full bg-amber-900 px-3 py-1.5 text-[11px] font-medium text-white">
+                      Switch
+                    </button>
+                  </motion.div>
+                )}
 
                 {isLoadingTokens ? (
                   <div className="flex gap-3 overflow-hidden">
