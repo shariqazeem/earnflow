@@ -810,158 +810,83 @@ export default function Home() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="flex flex-1 flex-col pt-6"
+              className="flex flex-1 flex-col pt-4"
             >
-              {/* Hero savings card — alive with shifting gradient */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease }}
-                className="savings-card p-7"
-              >
-                <p className="text-[13px] font-medium text-[#6E6E73]">
-                  Total Savings
-                </p>
-                <div className="mt-2">
-                  <KineticBalance value={earningAmount} />
-                </div>
-                {earningApy > 0 ? (
-                  <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#34C759]/10 px-3 py-1.5">
-                    <motion.div
-                      animate={{ scale: [1, 1.3, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="h-1.5 w-1.5 rounded-full bg-[#34C759]"
-                    />
-                    <span className="text-[13px] font-semibold text-[#34C759] tabular">
-                      Earning {earningApy.toFixed(2)}% APY
-                    </span>
-                  </div>
-                ) : (
-                  <>
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                      className="mt-3 text-[13px] text-[#AEAEB2]"
-                    >
-                      Deposit tokens to start earning yield
-                    </motion.p>
-                    <motion.div
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.45, ease }}
-                      className="mt-4 flex items-center gap-3 rounded-2xl bg-[#34C759]/[0.04] px-4 py-3"
-                    >
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#34C759]/10">
-                        <Sparkles className="h-4 w-4 text-[#34C759]" />
-                      </div>
-                      <div>
-                        <p className="text-[13px] font-medium text-[#1D1D1F]">
-                          Yields up to 10% APY available
-                        </p>
-                        <p className="text-[11px] text-[#AEAEB2]">
-                          20+ protocols &middot; 60+ chains
-                        </p>
-                      </div>
-                    </motion.div>
-                  </>
-                )}
-              </motion.div>
-
-              {/* Token list */}
+              {/* Balance — clean, centered, breathing room */}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="mt-6"
+                transition={{ duration: 0.5, ease }}
+                className="py-10 text-center"
               >
-                <p className="mb-3 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.08em] text-[#AEAEB2]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#34C759]" />
-                  Your Wallet &middot; {chainName}
+                <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-[#AEAEB2]">
+                  Total Savings
+                </p>
+                <div className="mt-3">
+                  <KineticBalance value={earningAmount} />
+                </div>
+                {earningApy > 0 ? (
+                  <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#1D1D1F]/[0.04] px-3.5 py-1.5">
+                    <motion.div
+                      animate={{ scale: [1, 1.3, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="h-1.5 w-1.5 rounded-full bg-[#1D1D1F]"
+                    />
+                    <span className="text-[12px] font-medium text-[#1D1D1F] tabular">
+                      {earningApy.toFixed(2)}% APY
+                    </span>
+                  </div>
+                ) : (
+                  <p className="mt-3 text-[13px] text-[#AEAEB2]">
+                    Choose a token below to start earning
+                  </p>
+                )}
+              </motion.div>
+
+              {/* Horizontal token scroller */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.08em] text-[#AEAEB2]">
+                  Earn on · {chainName}
                 </p>
 
                 {isLoadingTokens ? (
-                  <div className="space-y-2">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="skeleton h-[68px] w-full" />
-                    ))}
+                  <div className="flex gap-3 overflow-hidden">
+                    {[1, 2, 3].map((i) => <div key={i} className="skeleton h-24 w-28 shrink-0" />)}
                   </div>
                 ) : withBalance.length === 0 ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15, ease }}
-                    className="card overflow-hidden"
-                  >
-                    <div className="relative px-7 pb-8 pt-10 text-center">
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#34C759]/[0.03] to-transparent" />
-                      <motion.div
-                        animate={{ y: [-4, 4, -4] }}
-                        transition={{
-                          duration: 4,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                        className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#34C759]/10"
-                      >
-                        <Wallet className="h-8 w-8 text-[#34C759]" />
-                      </motion.div>
-                      <h3 className="text-[17px] font-semibold text-[#1D1D1F]">
-                        Fund your wallet to start
-                      </h3>
-                      <p className="mx-auto mt-2 max-w-[260px] text-[13px] leading-relaxed text-[#AEAEB2]">
-                        Transfer tokens to your wallet on any supported chain.
-                        We&apos;ll find the best yield for you.
-                      </p>
-                      <div className="mt-5 flex justify-center gap-2.5">
-                        {["ETH", "USDC", "USDT", "DAI"].map((sym) => (
-                          <TokenIcon key={sym} symbol={sym} size={36} />
-                        ))}
-                      </div>
-                      <p className="mt-4 text-[11px] text-[#AEAEB2]">
-                        Supports Ethereum, Base, Arbitrum &amp; 60+ more
-                      </p>
-                    </div>
-                  </motion.div>
+                  <div className="card py-10 text-center">
+                    <motion.div animate={{ y: [-3, 3, -3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F0F0F2]">
+                      <Wallet className="h-7 w-7 text-[#AEAEB2]" />
+                    </motion.div>
+                    <p className="text-[15px] font-semibold text-[#1D1D1F]">No tokens found</p>
+                    <p className="mx-auto mt-1.5 max-w-[240px] text-[12px] text-[#AEAEB2]">
+                      Transfer tokens to your wallet on any supported chain
+                    </p>
+                  </div>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="scroll-snap-x flex gap-2.5 pb-1">
                     {withBalance.map((token, i) => {
                       const bal = parseFloat(token.balance);
                       return (
                         <motion.button
                           key={token.symbol}
-                          initial={{ opacity: 0, y: 12 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 + i * 0.06, ease }}
-                          whileHover={{
-                            y: -2,
-                            boxShadow:
-                              "0 0 0 0.5px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.06)",
-                          }}
-                          whileTap={{ scale: 0.98 }}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.2 + i * 0.05, ease }}
+                          whileHover={{ y: -3, boxShadow: "0 8px 24px rgba(0,0,0,0.06)" }}
+                          whileTap={{ scale: 0.97 }}
                           onClick={() => handleSelectToken(token)}
-                          className="group card flex w-full cursor-pointer items-center justify-between !rounded-2xl !p-4 text-left transition-all duration-200"
+                          className="card flex w-[140px] shrink-0 flex-col items-center gap-2 !rounded-2xl !px-4 !py-5 text-center transition-all"
                         >
-                          <div className="flex items-center gap-3">
-                            <TokenIcon symbol={token.symbol} />
-                            <div>
-                              <p className="text-[15px] font-semibold text-[#1D1D1F]">
-                                {token.symbol}
-                              </p>
-                              <p className="text-[12px] text-[#AEAEB2]">
-                                {token.name}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-[15px] font-semibold text-[#1D1D1F] tabular">
-                              {bal.toLocaleString(undefined, {
-                                maximumFractionDigits: 4,
-                              })}
-                            </p>
-                            <p className="mt-0.5 flex translate-x-2 items-center justify-end gap-0.5 text-[11px] font-medium text-[#34C759] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                              Earn yield
-                              <ChevronRight className="h-3 w-3" />
+                          <TokenIcon symbol={token.symbol} size={40} />
+                          <div>
+                            <p className="text-[14px] font-semibold text-[#1D1D1F]">{token.symbol}</p>
+                            <p className="mt-0.5 text-[11px] text-[#AEAEB2] tabular">
+                              {bal.toLocaleString(undefined, { maximumFractionDigits: 4 })}
                             </p>
                           </div>
                         </motion.button>
@@ -971,45 +896,44 @@ export default function Home() {
                 )}
               </motion.div>
 
-              {/* How it works */}
-              {/* Live activity on savings home */}
+              {/* Live activity */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
-                className="mt-6 card !rounded-2xl !p-4"
+                transition={{ delay: 0.3 }}
+                className="mt-7 rounded-2xl bg-[#F8F8FA] px-4 py-3.5"
               >
                 <LiveFeed />
               </motion.div>
 
+              {/* How it works — minimal */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="mt-auto pb-8 pt-6"
+                className="mt-auto pb-8 pt-8"
               >
-                <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.08em] text-[#AEAEB2]">
-                  How Shift works
-                </p>
-                {[
-                  "Pick a token from your wallet",
-                  "We find the safest, highest yield",
-                  "One tap — bridging & routing handled",
-                  "Earn 24/7. Shift to better rates anytime.",
-                ].map((t, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 + i * 0.08, ease }}
-                    className="mb-2.5 flex items-center gap-3"
-                  >
-                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#F0F0F2] text-[11px] font-semibold text-[#6E6E73]">
-                      {i + 1}
-                    </div>
-                    <p className="text-[13px] text-[#6E6E73]">{t}</p>
-                  </motion.div>
-                ))}
+                <div className="flex items-center justify-between gap-4">
+                  {[
+                    { num: "1", text: "Pick token" },
+                    { num: "2", text: "We find yield" },
+                    { num: "3", text: "One tap" },
+                    { num: "4", text: "Earn 24/7" },
+                  ].map((s, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 + i * 0.06 }}
+                      className="flex flex-col items-center gap-1.5 text-center"
+                    >
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F0F0F2] text-[10px] font-bold text-[#6E6E73]">
+                        {s.num}
+                      </div>
+                      <p className="text-[10px] font-medium text-[#AEAEB2]">{s.text}</p>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             </motion.div>
           )}
