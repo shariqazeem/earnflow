@@ -34,9 +34,12 @@ export async function GET(req: NextRequest) {
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({ message: "Quote failed" }));
+      const errMsg = (err as { message?: string }).message ?? `Composer error: ${res.status}`;
       return NextResponse.json(
-        { error: (err as { message?: string }).message ?? `Composer error: ${res.status}` },
-        { status: res.status }
+        { error: errMsg.includes("No available quotes")
+            ? "No available quotes for the requested transfer"
+            : errMsg },
+        { status: 400 }
       );
     }
 

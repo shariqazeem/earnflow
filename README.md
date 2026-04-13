@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shift — Your Savings, Supercharged
 
-## Getting Started
+A DeFi savings account that makes earning yield as simple as a bank deposit. Built for the [DeFi Mullet Hackathon](https://docs.li.fi/earn/overview) (DeFi UX Challenge track).
 
-First, run the development server:
+**Live:** [earnflow-app.vercel.app](https://earnflow-app.vercel.app)
+
+## What it does
+
+Shift turns complex DeFi yield into a one-tap savings experience:
+
+1. **Connect wallet** — MetaMask, Coinbase, Rainbow, or any injected wallet
+2. **Pick a token** — see your balances across Ethereum, Arbitrum, Base, Optimism, Polygon
+3. **One tap deposit** — we find the best vault (safety-scored) across 20+ protocols and 60+ chains, then deposit via LI.FI Composer in a single cross-chain transaction
+4. **Watch it grow** — real-time earning counter with live yield projections
+5. **Shift to better rates** — when a higher-yield vault appears, migrate in one tap (cross-chain yield migration)
+
+## How it uses LI.FI
+
+**Earn Data API:**
+- Vault discovery across all supported protocols and chains
+- Real-time APY, TVL, and protocol metadata
+- Portfolio position tracking
+- Safety scoring based on protocol trust + TVL + APY sustainability
+
+**Composer API:**
+- Cross-chain deposit execution (swap + bridge + deposit in one tx)
+- ERC20 approval handling
+- Cross-chain transaction status tracking
+- Withdrawal execution
+
+**API Routes:**
+- `/api/best-vault` — scans all vaults, ranks by composite score (APY + trust + TVL), returns best + alternatives
+- `/api/top-yields` — real-time top yields across all chains
+- `/api/shift` — finds better yield opportunities for existing positions
+- `/api/quote` — LI.FI Composer quote proxy
+- `/api/positions` — fetches user's active earning positions
+- `/api/status` — tracks cross-chain transaction progress
+
+## Key features
+
+- **Safety scoring** (1-5 scale) based on protocol reputation, TVL, and APY sustainability
+- **Cross-chain yield migration ("Shift")** — move funds to better vaults across chains
+- **Live yield counter** — real-time earning visualization with milestone celebrations
+- **Social proof** — live activity feed and leaderboard
+- **Sound design** — synthesized audio feedback for deposits, earnings, and milestones
+- **Cinematic UI** — Apple Savings-inspired design with Framer Motion animations
+
+## Tech stack
+
+- **Next.js 16** with Turbopack
+- **React 19** + TypeScript
+- **Tailwind CSS 4** + Framer Motion
+- **wagmi v3** + viem for wallet integration
+- **LI.FI Earn API** + Composer for DeFi infrastructure
+
+## Run locally
 
 ```bash
+npm install
+echo "LIFI_API_KEY=your_key" > .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What I'd build next
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Auto-rebalancing agent that monitors positions and shifts to better rates automatically
+- Multi-position portfolio view with aggregate yield tracking
+- Push notifications for rate changes and milestone celebrations
+- Fiat on-ramp integration for true "savings account" experience
 
-## Learn More
+## Feedback on LI.FI Earn API
 
-To learn more about Next.js, take a look at the following resources:
+The Earn Data API is excellent — vault discovery, pagination, and metadata are well-structured. Composer makes cross-chain deposits feel like a single-chain operation. The main friction point was CORS (solved by proxying through Next.js API routes). Having `isTransactional` and `isRedeemable` flags on vaults was very helpful for UX decisions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built by [@shariqazeem](https://x.com/shariqazeem) for the DeFi Mullet Hackathon.
