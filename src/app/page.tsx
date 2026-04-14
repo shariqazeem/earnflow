@@ -412,27 +412,27 @@ function ProjectionBars({
   ];
 
   return (
-    <div className="flex justify-center gap-12">
+    <div className="flex justify-center gap-8">
       {bars.map((b, i) => (
         <motion.div
           key={b.label}
-          className="flex flex-col items-center gap-2"
-          initial={{ opacity: 0, y: 12 }}
+          className="flex flex-col items-center"
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 + i * 0.12 }}
+          transition={{ delay: 1.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="relative h-16 w-8 overflow-hidden rounded-full bg-[#F0F0F2]">
+          <div className="relative h-20 w-10 overflow-hidden rounded-2xl bg-[#F5F5F7]">
             <motion.div
-              className="absolute bottom-0 w-full rounded-full bg-gradient-to-t from-[#34C759]/30 to-[#34C759]/10"
+              className="absolute bottom-0 w-full rounded-2xl bg-black"
               initial={{ height: 0 }}
-              animate={{ height: `${Math.max(b.pct, 12)}%` }}
-              transition={{ delay: 1.1 + i * 0.15, duration: 1, ease }}
+              animate={{ height: `${Math.max(b.pct, 10)}%` }}
+              transition={{ delay: 1.3 + i * 0.12, duration: 1, ease }}
             />
           </div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#AEAEB2]">
+          <p className="mt-2.5 text-[10px] font-bold uppercase tracking-[0.06em] text-[#AEAEB2]">
             {b.label}
           </p>
-          <p className="text-[15px] font-semibold text-[#1D1D1F] tabular">
+          <p className="mt-1 text-[16px] font-bold text-black tabular">
             +${b.value < 0.01 ? b.value.toFixed(4) : b.value.toFixed(2)}
           </p>
         </motion.div>
@@ -441,7 +441,7 @@ function ProjectionBars({
   );
 }
 
-/* ─── Earning Screen — The Dopamine Machine ─── */
+/* ─── Earning Screen — Premium Zen Mode ─── */
 function EarningScreen({
   principal,
   apy,
@@ -475,21 +475,21 @@ function EarningScreen({
 
   return (
     <div className="relative text-center">
-      {/* Ambient glow behind the number */}
       <div className="earning-glow" />
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="section-label"
+        transition={{ delay: 0.2 }}
+        className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#86868B]"
       >
         Your Savings
       </motion.p>
 
       <motion.p
-        initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+        initial={{ opacity: 0, scale: 0.92, filter: "blur(16px)" }}
         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-        transition={{ delay: 0.15, duration: 0.8, ease }}
+        transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="hero-number counter-glow mt-4"
       >
         $
@@ -500,12 +500,12 @@ function EarningScreen({
       </motion.p>
 
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="yield-badge mx-auto mt-5"
+        transition={{ delay: 0.6 }}
+        className="mx-auto mt-6 inline-flex items-center gap-2.5 rounded-full bg-black px-5 py-2.5"
       >
-        <div className="relative h-2.5 w-2.5">
+        <div className="relative h-2 w-2">
           <motion.div
             animate={{ scale: [1, 1.6, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -513,31 +513,27 @@ function EarningScreen({
           />
           <div className="live-dot absolute inset-0 rounded-full" />
         </div>
-        <span className="text-[15px] font-semibold text-[#34C759] tabular">
+        <span className="text-[14px] font-bold text-[#34C759] tabular">
           +${earned < 0.01 ? earned.toFixed(6) : earned.toFixed(4)}
         </span>
-        <span className="text-[12px] text-[#34C759]/60">earned</span>
+        <span className="text-[12px] text-white/30">earned</span>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-        className="mx-auto mt-4 flex max-w-[300px] items-center justify-center gap-2 rounded-full bg-[#F0F0F2] px-4 py-2.5"
-      >
-        <Shield className="h-3.5 w-3.5 text-[#6E6E73]" />
-        <span className="text-[13px] text-[#6E6E73]">
-          {protocol} &middot; {network} &middot; {apy.toFixed(2)}% APY
-        </span>
-      </motion.div>
-
-      <motion.div
+      <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
+        className="mt-4 text-[14px] text-[#86868B]"
+      >
+        {protocol} &middot; {network} &middot; {apy.toFixed(2)}% APY
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.0 }}
         className="mt-10"
       >
-        <p className="section-label mb-4">Projected Earnings</p>
         <ProjectionBars perDay={perDay} perMonth={perMonth} perYear={perYear} />
       </motion.div>
     </div>
@@ -559,9 +555,9 @@ function ShiftCard({
       initial={{ opacity: 0, y: 24, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={springGentle}
-      className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1D1D1F] to-[#2D2D30]"
+      className="relative overflow-hidden rounded-[24px] bg-black"
     >
-      <div className="shift-glow absolute inset-0 rounded-3xl opacity-30" />
+      <div className="shift-glow absolute inset-0 rounded-[24px] opacity-15" />
       <div className="relative p-6">
         <div className="mb-4 flex items-center gap-3">
           <motion.div
@@ -630,7 +626,7 @@ function ShiftCard({
           whileTap={{ scale: 0.97 }}
           onClick={onShift}
           disabled={isLoading}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#34C759] py-4 text-[15px] font-semibold text-white transition-all hover:bg-[#2DB84D] disabled:opacity-50"
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-white py-4 text-[15px] font-bold text-black transition-all hover:bg-white/90 disabled:opacity-50"
         >
           {isLoading ? (
             <>
@@ -649,28 +645,52 @@ function ShiftCard({
   );
 }
 
+/* ─── Scroll Arrows for desktop carousels ─── */
+function ScrollArrows({ scrollRef }: { scrollRef: React.RefObject<HTMLDivElement | null> }) {
+  const scroll = (dir: number) => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollBy({ left: dir * 200, behavior: "smooth" });
+  };
+  return (
+    <div className="hidden items-center gap-1.5 sm:flex">
+      <button
+        onClick={() => scroll(-1)}
+        className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5F5F7] text-[#86868B] transition-all hover:bg-[#E5E5EA] active:scale-90"
+      >
+        <ArrowRight className="h-3 w-3 rotate-180" />
+      </button>
+      <button
+        onClick={() => scroll(1)}
+        className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5F5F7] text-[#86868B] transition-all hover:bg-[#E5E5EA] active:scale-90"
+      >
+        <ArrowRight className="h-3 w-3" />
+      </button>
+    </div>
+  );
+}
+
 /* ═══ VIEW TRANSITIONS ═══ */
 
 const slideVariants = {
   enter: (d: number) => ({
-    x: d > 0 ? 60 : -60,
+    x: d > 0 ? 40 : -40,
     opacity: 0,
-    scale: 0.97,
-    filter: "blur(8px)",
+    scale: 0.98,
+    filter: "blur(12px)",
   }),
   center: {
     x: 0,
     opacity: 1,
     scale: 1,
     filter: "blur(0px)",
-    transition: { duration: 0.5, ease },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
   exit: (d: number) => ({
-    x: d > 0 ? -60 : 60,
+    x: d > 0 ? -40 : 40,
     opacity: 0,
-    scale: 0.97,
-    filter: "blur(8px)",
-    transition: { duration: 0.35, ease },
+    scale: 0.98,
+    filter: "blur(12px)",
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
   }),
 };
 
@@ -738,6 +758,8 @@ export default function Home() {
   const [topYieldsScanned, setTopYieldsScanned] = useState(0);
 
   const isDisconnecting = useRef(false);
+  const marketScrollRef = useRef<HTMLDivElement>(null);
+  const yieldScrollRef = useRef<HTMLDivElement>(null);
 
   /* ─── Navigation ─── */
   const viewRef = useRef(view);
@@ -750,9 +772,20 @@ export default function Home() {
     setView(v);
   }, []);
 
+  // Connection journey: welcome → brief "connecting" moment → dashboard
+  const [showConnecting, setShowConnecting] = useState(false);
+
   useEffect(() => {
     if (isDisconnecting.current) return;
-    if (isConnected && view === "welcome") navigateTo("savings");
+    if (isConnected && view === "welcome") {
+      // Show connecting animation before dashboard
+      setShowConnecting(true);
+      const t = setTimeout(() => {
+        setShowConnecting(false);
+        navigateTo("savings");
+      }, 5000);
+      return () => clearTimeout(t);
+    }
     if (!isConnected && view !== "welcome") navigateTo("welcome");
   }, [isConnected, view, navigateTo]);
 
@@ -1166,33 +1199,203 @@ export default function Home() {
      ═══════════════════════════════════════════════════ */
 
   return (
-    <div className="relative min-h-[100dvh] overflow-hidden bg-[#FBFBFD]">
-      {/* Ambient background blobs */}
+    <div className="relative min-h-[100dvh] overflow-hidden bg-[#FAFAFA]">
+      {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div
           className="ambient-blob"
           style={{
-            top: "-20%",
-            right: "-15%",
-            width: "70vw",
-            height: "70vw",
-            background:
-              "radial-gradient(circle, rgba(52,199,89,0.035) 0%, transparent 70%)",
+            top: "-25%",
+            right: "-20%",
+            width: "80vw",
+            height: "80vw",
+            background: "radial-gradient(circle, rgba(52,199,89,0.03) 0%, transparent 60%)",
           }}
         />
         <div
           className="ambient-blob"
           style={{
-            bottom: "-30%",
-            left: "-20%",
-            width: "60vw",
-            height: "60vw",
-            background:
-              "radial-gradient(circle, rgba(52,199,89,0.025) 0%, transparent 70%)",
-            animationDelay: "-12s",
+            bottom: "-25%",
+            left: "-15%",
+            width: "70vw",
+            height: "70vw",
+            background: "radial-gradient(circle, rgba(52,199,89,0.02) 0%, transparent 60%)",
+            animationDelay: "-15s",
           }}
         />
       </div>
+
+      {/* ─── Connecting Journey — The Savings Card Reveal ─── */}
+      <AnimatePresence>
+        {showConnecting && (
+          <motion.div
+            key="connecting"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.05, filter: "blur(20px)" }}
+            transition={{ duration: 0.6 }}
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-black"
+          >
+            {/* Phase 1: The card materializes from the void (0.3-1.5s) */}
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0, rotateX: 30, rotateY: -10 }}
+              animate={{ scale: 1, opacity: 1, rotateX: 0, rotateY: 0 }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+              style={{ perspective: 1200, transformStyle: "preserve-3d" }}
+              className="relative"
+            >
+              <motion.div
+                animate={{ rotateY: [0, 3, -3, 0], rotateX: [0, -1, 1, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative h-[230px] w-[360px] overflow-hidden rounded-[28px]"
+                style={{
+                  background: "linear-gradient(145deg, #111111 0%, #1e1e1e 30%, #151515 60%, #1a1a1a 100%)",
+                  boxShadow: "0 30px 80px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(255,255,255,0.06) inset, 0 0 140px rgba(52,199,89,0.06)",
+                }}
+              >
+                {/* Light sweep — Phase 2 (1.2s) */}
+                <motion.div
+                  initial={{ x: "-100%", opacity: 0 }}
+                  animate={{ x: "300%", opacity: [0, 1, 0] }}
+                  transition={{ duration: 2, delay: 1.2, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                  style={{
+                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)",
+                    width: "40%",
+                  }}
+                />
+
+                {/* Second shimmer — green tint (2.5s) */}
+                <motion.div
+                  initial={{ x: "-100%", opacity: 0 }}
+                  animate={{ x: "300%", opacity: [0, 1, 0] }}
+                  transition={{ duration: 1.8, delay: 2.8, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                  style={{
+                    background: "linear-gradient(90deg, transparent, rgba(52,199,89,0.06), transparent)",
+                    width: "40%",
+                  }}
+                />
+
+                <div className="relative flex h-full flex-col justify-between p-8">
+                  {/* Card header — logo + badge (1.0s) */}
+                  <div className="flex items-center justify-between">
+                    <motion.div
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 1.0, duration: 0.7 }}
+                      className="flex items-center gap-3"
+                    >
+                      <div className="flex h-9 w-9 items-center justify-center rounded-[11px] bg-white/[0.08] ring-1 ring-white/[0.06]">
+                        <TrendingUp className="h-4 w-4 text-white" strokeWidth={2} />
+                      </div>
+                      <span className="text-[17px] font-bold tracking-[-0.02em] text-white">
+                        Shift
+                      </span>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 1.3, duration: 0.5 }}
+                      className="rounded-full bg-white/[0.06] px-3 py-1.5 ring-1 ring-white/[0.04]"
+                    >
+                      <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/30">
+                        Savings
+                      </span>
+                    </motion.div>
+                  </div>
+
+                  {/* Card center — wallet address (1.5s) */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.6, duration: 0.8 }}
+                  >
+                    <p className="text-[10px] uppercase tracking-[0.1em] text-white/15">Account</p>
+                    <p className="mt-1.5 font-mono text-[16px] tracking-[0.1em] text-white/50">
+                      {address?.slice(0, 6)}&nbsp;&middot;&middot;&middot;&middot;&nbsp;{address?.slice(-4)}
+                    </p>
+                  </motion.div>
+
+                  {/* Card footer — status + chain (2.0s) */}
+                  <div className="flex items-end justify-between">
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 2.1, duration: 0.6 }}
+                    >
+                      <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/15">Status</p>
+                      <div className="mt-1.5 flex items-center gap-2">
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 2.4, type: "spring", stiffness: 300 }}
+                        >
+                          <motion.div
+                            animate={{ scale: [1, 1.4, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            className="h-2 w-2 rounded-full bg-[#34C759]"
+                          />
+                        </motion.div>
+                        <motion.p
+                          initial={{ opacity: 0, x: -4 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 2.5 }}
+                          className="text-[14px] font-bold text-[#34C759]"
+                        >
+                          Active
+                        </motion.p>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 2.3, duration: 0.6 }}
+                      className="text-right"
+                    >
+                      <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/15">Network</p>
+                      <p className="mt-1.5 text-[14px] font-semibold text-white/40">{chainName}</p>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Phase 3: Text reveals below (3.0s) */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3.0, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-12 text-[18px] font-bold text-white"
+            >
+              Your savings account is ready
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 3.5, duration: 0.6 }}
+              className="mt-3 text-[14px] text-white/25"
+            >
+              Preparing your dashboard...
+            </motion.p>
+
+            {/* Phase 4: Loading bar (3.8s) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 3.8 }}
+              className="mt-6 h-[3px] w-32 overflow-hidden rounded-full bg-white/[0.06]"
+            >
+              <motion.div
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ delay: 3.9, duration: 1, ease: "easeInOut" }}
+                className="h-full rounded-full bg-[#34C759]"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Success flash */}
       <AnimatePresence>
@@ -1209,29 +1412,22 @@ export default function Home() {
       </AnimatePresence>
 
       <div className="relative mx-auto flex min-h-[100dvh] max-w-[440px] flex-col px-6">
-        {/* ─── Header ─── */}
+        {/* ─── Header — minimal, premium ─── */}
         {isConnected && view !== "welcome" && (
           <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease }}
-            className="flex items-center justify-between pb-2 pt-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="flex items-center justify-between pb-3 pt-6"
           >
             <button
-              onClick={() => {
-                depositor.reset();
-                withdrawer.reset();
-                navigateTo("savings");
-              }}
-              className="flex items-center gap-2.5 transition-transform active:scale-95"
+              onClick={() => { depositor.reset(); withdrawer.reset(); navigateTo("savings"); }}
+              className="flex items-center gap-2.5 transition-all active:scale-95"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-[12px] bg-gradient-to-br from-[#34C759] to-[#30D158] shadow-[0_2px_8px_rgba(52,199,89,0.3)]">
-                <TrendingUp
-                  className="h-4.5 w-4.5 text-white"
-                  strokeWidth={2}
-                />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black">
+                <TrendingUp className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />
               </div>
-              <span className="text-[16px] font-semibold tracking-[-0.02em] text-[#1D1D1F]">
+              <span className="text-[17px] font-bold tracking-[-0.03em] text-black">
                 Shift
               </span>
             </button>
@@ -1241,21 +1437,16 @@ export default function Home() {
                 depositor.reset();
                 withdrawer.reset();
                 navigateTo("welcome");
-                try {
-                  await disconnectAsync();
-                } catch {}
+                try { await disconnectAsync(); } catch {}
                 isDisconnecting.current = false;
               }}
-              className="flex min-h-[44px] items-center gap-2 rounded-full bg-[#F0F0F2] px-3.5 py-2 text-[12px] font-medium text-[#6E6E73] transition-all hover:bg-[#E8E8EC] active:scale-[0.97]"
+              className="flex min-h-[44px] items-center gap-2 rounded-full bg-[#F5F5F7] px-4 py-2.5 text-[13px] font-medium text-[#86868B] transition-all hover:bg-[#E5E5EA] active:scale-[0.97]"
             >
-              <div className="relative h-2 w-2">
+              <div className="relative h-1.5 w-1.5">
                 <div className="absolute inset-0 rounded-full bg-[#34C759]" />
                 <div className="live-dot absolute inset-0 rounded-full" />
               </div>
               {address?.slice(0, 6)}...{address?.slice(-4)}
-              <span className="text-[#AEAEB2]">&middot;</span>
-              {chainName}
-              <LogOut className="ml-0.5 h-3 w-3 text-[#AEAEB2]" />
             </button>
           </motion.div>
         )}
@@ -1273,81 +1464,93 @@ export default function Home() {
               exit="exit"
               className="flex flex-1 flex-col items-center justify-center"
             >
-              <FloatingAmount />
-              <ParticleField count={28} />
+              <ParticleField count={20} />
 
-              {/* Logo */}
+              {/* ─── THE UNBOXING ───
+                  Pacing: silence → dot → logo → headline → details → action
+                  Each beat has breathing room. Luxury = patience. */}
+
+              {/* Spacer — pushes content to golden ratio, prevents logo hitting URL bar */}
+              <div className="flex-[0.38]" />
+
+              {/* Phase 1: Logo materializes (0.0s - 1.0s) */}
               <motion.div
-                initial={{ scale: 0.3, opacity: 0, filter: "blur(20px)" }}
-                animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-                transition={{ duration: 1, ease }}
-                className="relative mb-12"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                className="relative"
               >
+                {/* Glow that breathes */}
                 <motion.div
                   animate={{
                     boxShadow: [
-                      "0 0 0px 0px rgba(52,199,89,0)",
-                      "0 0 60px 12px rgba(52,199,89,0.2)",
-                      "0 0 0px 0px rgba(52,199,89,0)",
+                      "0 0 0 0 rgba(52,199,89,0)",
+                      "0 0 60px 15px rgba(52,199,89,0.1)",
+                      "0 0 0 0 rgba(52,199,89,0)",
                     ],
                   }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="flex h-24 w-24 items-center justify-center rounded-[28px] bg-gradient-to-br from-[#34C759] to-[#30D158] shadow-lg"
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                  className="flex h-20 w-20 items-center justify-center rounded-[22px] bg-black"
                 >
-                  <TrendingUp
-                    className="h-12 w-12 text-white"
-                    strokeWidth={1.5}
-                  />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.8, duration: 0.5 }}
+                  >
+                    <TrendingUp className="h-9 w-9 text-white" strokeWidth={1.5} />
+                  </motion.div>
                 </motion.div>
-                {/* Subtle ring */}
-                <motion.div
-                  animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0, 0.3] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute -inset-3 rounded-[36px] border border-[#34C759]/20"
-                />
               </motion.div>
 
-              <WordReveal
-                lines={["Your savings,", "supercharged."]}
-                delay={0.3}
-                className="text-center text-[44px] font-semibold leading-[1.06] tracking-[-0.04em] text-[#1D1D1F] sm:text-[56px]"
-              />
-
+              {/* Phase 2: Name appears (0.8s) */}
               <motion.p
-                initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ delay: 0.7, duration: 0.7, ease }}
-                className="mt-6 max-w-[300px] text-center text-[17px] leading-[1.6] text-[#6E6E73]"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.0, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-6 text-[15px] font-semibold tracking-[0.15em] text-black/30"
               >
-                Earn up to 10% APY. Best yield across 20+ protocols, 60+ chains.
-                One tap.
+                SHIFT
               </motion.p>
 
-              {/* Live yield pills */}
+              {/* Phase 3: Headline — the statement (1.2s) */}
+              <div className="mt-10">
+                <WordReveal
+                  lines={["Your savings,", "supercharged."]}
+                  delay={1.2}
+                  className="text-center text-[46px] font-bold leading-[1.0] tracking-[-0.045em] text-black sm:text-[58px]"
+                />
+              </div>
+
+              {/* Phase 4: Subtitle (1.8s) */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2.0, duration: 1 }}
+                className="mt-6 max-w-[260px] text-center text-[17px] leading-[1.5] text-[#86868B]"
+              >
+                Best yield across 20+ protocols.
+                <br />
+                One tap. Zero complexity.
+              </motion.p>
+
+              {/* Phase 5: Live rates — proof it's real (2.3s) */}
               {topYields.length > 0 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 }}
-                  className="mt-8 flex gap-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.5, duration: 0.8 }}
+                  className="mt-10 flex gap-2"
                 >
                   {topYields.slice(0, 3).map((y, i) => (
                     <motion.div
                       key={i}
-                      initial={{ opacity: 0, scale: 0.85 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.95 + i * 0.1 }}
-                      className="card-glass flex items-center gap-2 !rounded-full !border-0 px-3.5 py-2"
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 2.6 + i * 0.12, type: "spring", stiffness: 300, damping: 25 }}
+                      className="flex items-center gap-2 rounded-full bg-white/80 px-4 py-2.5 ring-1 ring-black/[0.04]"
                     >
-                      <TokenIcon symbol={y.token} size={20} />
-                      <span className="text-[12px] font-semibold text-[#1D1D1F]">
-                        {y.token}
-                      </span>
-                      <span className="text-[12px] font-bold text-[#34C759] tabular">
+                      <TokenIcon symbol={y.token} size={16} />
+                      <span className="text-[13px] font-bold text-black tabular">
                         {y.apy.toFixed(1)}%
                       </span>
                     </motion.div>
@@ -1355,17 +1558,18 @@ export default function Home() {
                 </motion.div>
               )}
 
-              {/* Connect button */}
+              {/* Phase 6: The call to action (2.8s) */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1, duration: 0.6, ease }}
+                transition={{ delay: 3.0, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-12"
               >
                 <MagneticButton
                   onClick={() => connect({ connector: injected() })}
-                  className="btn-primary mt-10 gap-2.5 px-10 text-[17px]"
+                  className="btn-primary gap-3 px-14 text-[17px] tracking-[-0.01em]"
                 >
-                  <Wallet className="h-5 w-5" />
+                  <Wallet className="h-[18px] w-[18px]" />
                   Connect Wallet
                 </MagneticButton>
               </motion.div>
@@ -1373,47 +1577,28 @@ export default function Home() {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.3 }}
+                transition={{ delay: 3.4 }}
                 className="mt-4 text-[13px] text-[#AEAEB2]"
               >
-                MetaMask, Coinbase, Rainbow & more
+                MetaMask &middot; Coinbase &middot; Rainbow
               </motion.p>
 
-              {/* Bottom stats */}
+              {/* Phase 7: Footer — anchors the page (3.5s) */}
+              <div className="flex-[0.62]" />
               <motion.div
-                className="mt-16 flex items-center gap-6"
-                initial="hidden"
-                animate="show"
-                variants={{
-                  show: {
-                    transition: { staggerChildren: 0.08, delayChildren: 1.5 },
-                  },
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 3.6, duration: 1.2 }}
+                className="pb-8"
               >
-                {[
-                  `${topYieldsScanned || "400+"} vaults`,
-                  "20+ protocols",
-                  "Powered by LI.FI",
-                ].map((s, i, arr) => (
-                  <motion.span
-                    key={s}
-                    variants={{
-                      hidden: { opacity: 0, y: 10 },
-                      show: { opacity: 1, y: 0 },
-                    }}
-                    className="flex items-center gap-6 text-[11px] font-medium text-[#AEAEB2]"
-                  >
-                    {s}
-                    {i < arr.length - 1 && (
-                      <span className="text-[#E8E8EC]">&middot;</span>
-                    )}
-                  </motion.span>
-                ))}
+                <p className="text-center text-[11px] font-medium tracking-[0.06em] text-[#AEAEB2]/60">
+                  {topYieldsScanned || "400+"} VAULTS &middot; 20+ PROTOCOLS &middot; POWERED BY LI.FI
+                </p>
               </motion.div>
             </motion.div>
           )}
 
-          {/* ═══════════ SAVINGS DASHBOARD ═══════════ */}
+          {/* ═══════════ SAVINGS DASHBOARD — The Hypnotizer ═══════════ */}
           {view === "savings" && (
             <motion.div
               key="s"
@@ -1422,146 +1607,94 @@ export default function Home() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="flex flex-1 flex-col pt-2 pb-6"
+              className="flex flex-1 flex-col pt-2 pb-8"
             >
-              {/* ─── Hero Balance Card ─── */}
+              {/* ─── Balance Hero — clean, massive, confident ─── */}
               <motion.div
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease }}
-                className="relative mt-4 overflow-hidden rounded-3xl bg-gradient-to-br from-[#1D1D1F] to-[#2A2A2D] p-7"
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="py-10 text-center"
               >
-                {/* Animated gradient overlay */}
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#86868B]"
+                >
+                  Total Savings
+                </motion.p>
                 <motion.div
-                  animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 opacity-30"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(52,199,89,0.2) 0%, transparent 40%, rgba(52,199,89,0.15) 60%, transparent 100%)",
-                    backgroundSize: "200% 200%",
-                  }}
-                />
-                <div className="relative">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/40">
-                    Total Savings
-                  </p>
-                  <div className="mt-3">
-                    <KineticBalance
-                      value={earningAmount}
-                      className="!text-white !text-[52px] sm:!text-[64px]"
-                    />
-                  </div>
-                  {earningApy > 0 ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
-                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#34C759]/15 px-4 py-2"
-                    >
-                      <div className="relative h-2 w-2">
-                        <motion.div
-                          animate={{ scale: [1, 1.5, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="absolute inset-0 rounded-full bg-[#34C759]"
-                        />
-                        <div className="live-dot absolute inset-0 rounded-full" />
-                      </div>
-                      <span className="text-[13px] font-semibold text-[#34C759] tabular">
-                        Earning {earningApy.toFixed(2)}% APY
-                      </span>
-                    </motion.div>
-                  ) : (
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="mt-4 text-[14px] text-white/35"
-                    >
-                      Deposit below to start earning
-                    </motion.p>
-                  )}
-                  {/* Quick stats row */}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="mt-3"
+                >
+                  <KineticBalance value={earningAmount} />
+                </motion.div>
+                {earningApy > 0 ? (
                   <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="mx-auto mt-5 inline-flex items-center gap-2.5 rounded-full bg-black px-5 py-2.5"
+                  >
+                    <div className="relative h-2 w-2">
+                      <div className="absolute inset-0 rounded-full bg-[#34C759]" />
+                      <div className="live-dot absolute inset-0 rounded-full" />
+                    </div>
+                    <span className="text-[14px] font-bold text-[#34C759] tabular">
+                      {earningApy.toFixed(2)}% APY
+                    </span>
+                  </motion.div>
+                ) : (
+                  <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="mt-6 flex gap-4"
+                    className="mt-4 text-[15px] text-[#AEAEB2]"
                   >
-                    <div className="flex-1 rounded-2xl bg-white/[0.06] px-4 py-3">
-                      <p className="text-[10px] font-medium uppercase tracking-wider text-white/25">
-                        Positions
-                      </p>
-                      <p className="mt-0.5 text-[18px] font-semibold text-white tabular">
-                        {positions.length}
-                      </p>
-                    </div>
-                    <div className="flex-1 rounded-2xl bg-white/[0.06] px-4 py-3">
-                      <p className="text-[10px] font-medium uppercase tracking-wider text-white/25">
-                        Best APY
-                      </p>
-                      <p className="mt-0.5 text-[18px] font-semibold text-[#34C759] tabular">
-                        {topYields[0]
-                          ? `${topYields[0].apy.toFixed(1)}%`
-                          : "—"}
-                      </p>
-                    </div>
-                    <div className="flex-1 rounded-2xl bg-white/[0.06] px-4 py-3">
-                      <p className="text-[10px] font-medium uppercase tracking-wider text-white/25">
-                        Chains
-                      </p>
-                      <p className="mt-0.5 text-[18px] font-semibold text-white tabular">
-                        60+
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
+                    Start earning below
+                  </motion.p>
+                )}
               </motion.div>
 
               {/* ─── Active Positions ─── */}
               {positions.length > 0 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 14 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
-                  className="mt-7"
+                  transition={{ delay: 0.2 }}
+                  className="mb-8"
                 >
                   <p className="section-label mb-3">Active Positions</p>
-                  <div className="space-y-2.5">
+                  <div className="space-y-3">
                     {positions.map((p, i) => (
                       <motion.div
                         key={`${p.protocol}-${p.chain}-${i}`}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 + i * 0.06, ...springSnappy }}
-                        className="card !rounded-2xl !p-5"
+                        transition={{ delay: 0.25 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                        className="card !rounded-[20px] !p-5"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <TokenIcon symbol={p.tokenSymbol} size={44} />
+                          <div className="flex items-center gap-3.5">
+                            <TokenIcon symbol={p.tokenSymbol} size={46} />
                             <div>
-                              <p className="text-[15px] font-semibold text-[#1D1D1F]">
-                                {p.protocol}
-                              </p>
-                              <p className="text-[12px] text-[#AEAEB2]">
-                                {p.vault} &middot; {p.chain}
-                              </p>
+                              <p className="text-[16px] font-bold text-black">{p.protocol}</p>
+                              <p className="text-[13px] text-[#86868B]">{p.chain}</p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-[17px] font-bold text-[#1D1D1F] tabular">
-                              $
-                              {p.balanceUsd.toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                              })}
+                            <p className="text-[18px] font-bold text-black tabular">
+                              ${p.balanceUsd.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                             </p>
                             {p.apy > 0 && (
-                              <p className="text-[12px] font-semibold text-[#34C759] tabular">
-                                {p.apy.toFixed(2)}% APY
-                              </p>
+                              <p className="text-[13px] font-bold text-[#34C759] tabular">{p.apy.toFixed(2)}%</p>
                             )}
                           </div>
                         </div>
-                        <div className="mt-4 flex gap-2">
+                        <div className="mt-4 flex gap-2.5">
                           <button
                             onClick={() => {
                               setActivePosition(p);
@@ -1569,23 +1702,10 @@ export default function Home() {
                               setEarningApy(p.apy);
                               setEarningProtocol(p.protocol);
                               setEarningNetwork(p.chain);
-                              setVault({
-                                name: p.vault,
-                                address: p.vaultAddress,
-                                chainId: p.chainId,
-                                network: p.chain,
-                                protocol: p.protocol,
-                                apy: p.apy,
-                                tvl: "",
-                                token: {
-                                  symbol: p.tokenSymbol,
-                                  address: p.tokenAddress,
-                                  decimals: p.tokenDecimals,
-                                },
-                              });
+                              setVault({ name: p.vault, address: p.vaultAddress, chainId: p.chainId, network: p.chain, protocol: p.protocol, apy: p.apy, tvl: "", token: { symbol: p.tokenSymbol, address: p.tokenAddress, decimals: p.tokenDecimals } });
                               navigateTo("earning");
                             }}
-                            className="flex min-h-[42px] flex-1 items-center justify-center gap-2 rounded-xl bg-[#34C759]/[0.08] text-[13px] font-semibold text-[#34C759] transition-all hover:bg-[#34C759]/15 active:scale-[0.97]"
+                            className="btn-primary flex-1 !h-[44px] gap-2 !rounded-[14px] !text-[14px]"
                           >
                             <Sparkles className="h-4 w-4" />
                             View Earnings
@@ -1593,179 +1713,96 @@ export default function Home() {
                           {p.isRedeemable && (
                             <button
                               onClick={() => handleWithdraw(p)}
-                              disabled={
-                                withdrawer.status !== "idle" &&
-                                withdrawer.status !== "error" &&
-                                withdrawer.status !== "success"
-                              }
-                              className="flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-[#F0F0F2] px-5 text-[13px] font-semibold text-[#6E6E73] transition-all hover:bg-[#E8E8EC] active:scale-[0.97] disabled:opacity-40"
+                              disabled={withdrawer.status !== "idle" && withdrawer.status !== "error" && withdrawer.status !== "success"}
+                              className="btn-secondary !h-[44px] gap-2 !rounded-[14px] !px-5 !text-[14px] disabled:opacity-40"
                             >
                               <ArrowUpFromLine className="h-4 w-4" />
-                              Withdraw
                             </button>
                           )}
                         </div>
                       </motion.div>
                     ))}
                   </div>
-
-                  {withdrawer.status !== "idle" &&
-                    withdrawer.status !== "success" && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-3 flex items-center gap-3 rounded-2xl bg-[#34C759]/5 p-4"
-                      >
-                        {withdrawer.status === "error" ? (
-                          <>
-                            <AlertCircle className="h-4 w-4 text-red-500" />
-                            <p className="text-[13px] text-red-600">
-                              {withdrawer.error}
-                            </p>
-                          </>
-                        ) : (
-                          <>
-                            <Loader2 className="h-4 w-4 animate-spin text-[#34C759]" />
-                            <p className="text-[13px] font-medium text-[#34C759]">
-                              {withdrawer.statusMessage}
-                            </p>
-                          </>
-                        )}
-                      </motion.div>
-                    )}
+                  {withdrawer.status !== "idle" && withdrawer.status !== "success" && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3 flex items-center gap-3 rounded-2xl bg-[#F5F5F7] p-4">
+                      {withdrawer.status === "error" ? (
+                        <><AlertCircle className="h-4 w-4 text-red-500" /><p className="text-[13px] text-red-600">{withdrawer.error}</p></>
+                      ) : (
+                        <><Loader2 className="h-4 w-4 animate-spin text-black" /><p className="text-[13px] font-semibold text-black">{withdrawer.statusMessage}</p></>
+                      )}
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
 
-              {/* ─── Your Tokens — Earn On ─── */}
+              {/* ─── Your Tokens — The irresistible part ─── */}
               <motion.div
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="mt-7"
+                transition={{ delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="section-label">
-                    Your Tokens &middot; {chainName}
-                  </p>
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="section-label">{chainName}</p>
                   {withBalance.length > 0 && (
-                    <span className="text-[11px] font-medium text-[#AEAEB2]">
-                      Tap to earn
-                    </span>
+                    <motion.span
+                      animate={{ opacity: [0.3, 0.8, 0.3] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="text-[12px] font-semibold text-black/40"
+                    >
+                      Tap to earn →
+                    </motion.span>
                   )}
                 </div>
 
                 {isTestnet && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.97 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="mb-4 flex items-center justify-between rounded-2xl bg-amber-50 px-5 py-4"
-                  >
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-4 flex items-center justify-between rounded-2xl bg-amber-50 px-5 py-4">
                     <div>
-                      <p className="text-[14px] font-semibold text-amber-900">
-                        Switch to mainnet
-                      </p>
-                      <p className="text-[12px] text-amber-700">
-                        Yield is only available on mainnet chains
-                      </p>
+                      <p className="text-[14px] font-bold text-amber-900">Switch to mainnet</p>
+                      <p className="text-[12px] text-amber-700">Yield requires mainnet</p>
                     </div>
-                    <button
-                      onClick={async () => {
-                        try {
-                          await switchChain({ chainId: 1 });
-                        } catch {
-                          try {
-                            const eth = (
-                              window as unknown as {
-                                ethereum?: {
-                                  request: (a: {
-                                    method: string;
-                                    params: unknown[];
-                                  }) => Promise<void>;
-                                };
-                              }
-                            ).ethereum;
-                            await eth?.request({
-                              method: "wallet_switchEthereumChain",
-                              params: [{ chainId: "0x1" }],
-                            });
-                          } catch {}
-                        }
-                      }}
-                      className="rounded-full bg-amber-900 px-4 py-2 text-[12px] font-semibold text-white"
-                    >
-                      Switch
-                    </button>
+                    <button onClick={async () => { try { await switchChain({ chainId: 1 }); } catch { try { const eth = (window as unknown as { ethereum?: { request: (a: { method: string; params: unknown[] }) => Promise<void> } }).ethereum; await eth?.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] }); } catch {} } }} className="rounded-full bg-black px-4 py-2 text-[12px] font-semibold text-white">Switch</button>
                   </motion.div>
                 )}
 
                 {isLoadingTokens ? (
-                  <div className="space-y-2.5">
+                  <div className="space-y-3">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="skeleton h-[72px] !rounded-2xl" />
+                      <div key={i} className="skeleton h-[76px] !rounded-[20px]" />
                     ))}
                   </div>
                 ) : withBalance.length === 0 ? (
-                  <div className="card py-12 text-center">
-                    <motion.div
-                      animate={{ y: [-4, 4, -4] }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#F0F0F2]"
-                    >
-                      <Wallet className="h-8 w-8 text-[#AEAEB2]" />
+                  <div className="card py-14 text-center">
+                    <motion.div animate={{ y: [-3, 3, -3] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#F5F5F7]">
+                      <Wallet className="h-7 w-7 text-[#AEAEB2]" />
                     </motion.div>
-                    <p className="text-[16px] font-semibold text-[#1D1D1F]">
-                      No tokens found
-                    </p>
-                    <p className="mx-auto mt-2 max-w-[260px] text-[13px] leading-relaxed text-[#AEAEB2]">
-                      Transfer tokens to your wallet on any supported chain to
-                      start earning yield
+                    <p className="text-[17px] font-bold text-black">No tokens found</p>
+                    <p className="mx-auto mt-2 max-w-[240px] text-[14px] leading-relaxed text-[#86868B]">
+                      Transfer tokens to start earning yield
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     {withBalance.map((token, i) => {
                       const bal = parseFloat(token.balance);
-                      const color = TOKEN_COLORS[token.symbol.toUpperCase()] ?? "#6E6E73";
                       return (
                         <motion.button
                           key={token.symbol}
-                          initial={{ opacity: 0, y: 10 }}
+                          initial={{ opacity: 0, y: 14 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.25 + i * 0.05, ...springSnappy }}
-                          whileHover={{ scale: 1.01 }}
+                          transition={{ delay: 0.35 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => handleSelectToken(token)}
-                          className="card group flex w-full items-center gap-4 !rounded-2xl !p-4 text-left transition-all"
+                          className="card group flex w-full items-center gap-4 !rounded-[20px] !p-5 text-left transition-all active:!shadow-none"
                         >
-                          <TokenIcon symbol={token.symbol} size={48} />
+                          <TokenIcon symbol={token.symbol} size={50} />
                           <div className="flex-1">
-                            <p className="text-[16px] font-semibold text-[#1D1D1F]">
-                              {token.symbol}
-                            </p>
-                            <p className="text-[13px] text-[#AEAEB2] tabular">
-                              {bal.toLocaleString(undefined, {
-                                maximumFractionDigits: 4,
-                              })}{" "}
-                              {token.symbol}
+                            <p className="text-[17px] font-bold text-black">{token.symbol}</p>
+                            <p className="mt-0.5 text-[14px] text-[#86868B] tabular">
+                              {bal.toLocaleString(undefined, { maximumFractionDigits: 4 })}
                             </p>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-[13px] font-semibold text-[#34C759] opacity-0 transition-all group-hover:opacity-100">
-                              Earn
-                            </span>
-                            <div
-                              className="flex h-9 w-9 items-center justify-center rounded-full transition-all group-hover:scale-105"
-                              style={{ background: `${color}12` }}
-                            >
-                              <ArrowRight
-                                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                                style={{ color }}
-                              />
-                            </div>
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black transition-transform group-hover:scale-110 group-active:scale-95">
+                            <ArrowRight className="h-4 w-4 text-white" />
                           </div>
                         </motion.button>
                       );
@@ -1774,178 +1811,95 @@ export default function Home() {
                 )}
               </motion.div>
 
-              {/* ─── Top Yields — Live Rates ─── */}
+              {/* ─── Market Pulse — compact, premium ─── */}
               {topYields.length > 0 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="mt-8"
+                  transition={{ delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="mt-10"
                 >
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="section-label">Top Yields &middot; Live</p>
-                    <div className="flex items-center gap-1.5">
-                      <div className="relative h-2 w-2">
-                        <motion.div
-                          animate={{ scale: [1, 1.3, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="absolute inset-0 rounded-full bg-[#34C759]"
-                        />
-                      </div>
+                  <div className="mb-4 flex items-center justify-between">
+                    <p className="section-label">Market</p>
+                    <div className="flex items-center gap-3">
                       <span className="text-[11px] font-medium text-[#AEAEB2]">
-                        {topYieldsScanned} vaults scanned
+                        {topYieldsScanned} vaults
                       </span>
+                      <ScrollArrows scrollRef={marketScrollRef} />
                     </div>
                   </div>
-                  <div className="card overflow-hidden !rounded-2xl !p-0">
-                    {topYields.map((y, i) => (
+
+                  <div ref={marketScrollRef} className="scroll-snap-x -mx-6 flex gap-3 px-6 pb-2">
+                    {topYields.slice(0, 4).map((y, i) => (
                       <motion.div
                         key={`${y.protocol}-${y.token}-${i}`}
-                        initial={{ opacity: 0, x: -8 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.35 + i * 0.05 }}
-                        className={`flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#F8F8FA] ${
-                          i < topYields.length - 1
-                            ? "border-b border-[#F0F0F2]"
-                            : ""
-                        }`}
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.45 + i * 0.08, type: "spring", stiffness: 300, damping: 25 }}
+                        className="w-[160px] shrink-0 rounded-[20px] bg-black p-5"
                       >
-                        <div className="flex items-center gap-3.5">
-                          <div className="relative">
-                            <TokenIcon symbol={y.token} size={40} />
-                            {y.trusted && (
-                              <div className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#34C759] ring-2 ring-white">
-                                <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
-                              </div>
-                            )}
-                          </div>
-                          <div>
-                            <p className="text-[15px] font-semibold text-[#1D1D1F]">
-                              {y.token}
-                            </p>
-                            <p className="text-[12px] text-[#AEAEB2]">
-                              {y.protocol} &middot; {y.network}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[18px] font-bold text-[#34C759] tabular">
-                            {y.apy.toFixed(2)}%
-                          </p>
-                          <p className="text-[11px] text-[#AEAEB2]">
-                            {y.tvl} TVL
-                          </p>
-                        </div>
+                        <TokenIcon symbol={y.token} size={36} />
+                        <p className="mt-3 text-[26px] font-bold leading-none text-[#34C759] tabular">
+                          {y.apy.toFixed(1)}%
+                        </p>
+                        <p className="mt-1 text-[13px] font-bold text-white">
+                          {y.token}
+                        </p>
+                        <p className="mt-0.5 text-[11px] text-white/30">
+                          {y.protocol}
+                        </p>
                       </motion.div>
                     ))}
                   </div>
                 </motion.div>
               )}
 
-              {/* ─── Shift Feature Teaser ─── */}
+              {/* ─── Shift Banner — compelling, minimal ─── */}
               {positions.length === 0 && topYields.length >= 2 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
+                  transition={{ delay: 0.55 }}
                   className="mt-8"
                 >
-                  <p className="section-label mb-3">
-                    <Zap className="mr-1 inline h-3 w-3" />
-                    Shift — Auto Rate Migration
-                  </p>
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1D1D1F] to-[#2D2D30] p-5">
-                    <div className="shift-glow absolute inset-0 opacity-20" />
-                    <div className="relative">
-                      <p className="text-[14px] font-semibold text-white">
-                        Always earning the best rate
+                  <div className="flex items-center gap-4 rounded-[20px] bg-[#F5F5F7] p-5">
+                    <motion.div
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black"
+                    >
+                      <ArrowRightLeft className="h-5 w-5 text-white" />
+                    </motion.div>
+                    <div className="flex-1">
+                      <p className="text-[15px] font-bold text-black">Shift</p>
+                      <p className="mt-0.5 text-[13px] text-[#86868B]">
+                        Auto-migrate to better rates across chains
                       </p>
-                      <p className="mt-1.5 text-[12px] leading-relaxed text-white/40">
-                        When a better vault appears across any chain, Shift
-                        migrates your funds in one tap — cross-chain, automatic.
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[11px] text-[#AEAEB2]">up to</p>
+                      <p className="text-[18px] font-bold text-[#34C759] tabular">
+                        {topYields[0]?.apy.toFixed(1)}%
                       </p>
-                      <div className="mt-4 flex items-center gap-3">
-                        <div className="flex-1 rounded-xl bg-white/[0.06] px-3 py-2.5 text-center">
-                          <p className="text-[10px] text-white/30">Example</p>
-                          <p className="text-[16px] font-light text-white/50 tabular">
-                            {topYields[1]?.apy.toFixed(1)}%
-                          </p>
-                        </div>
-                        <motion.div
-                          animate={{ x: [0, 5, 0] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                        >
-                          <ArrowRight className="h-4 w-4 text-[#34C759]" />
-                        </motion.div>
-                        <div className="flex-1 rounded-xl bg-[#34C759]/10 px-3 py-2.5 text-center">
-                          <p className="text-[10px] text-[#34C759]/50">Better</p>
-                          <p className="text-[16px] font-light text-[#34C759] tabular">
-                            {topYields[0]?.apy.toFixed(1)}%
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mt-3 flex items-center gap-1.5">
-                        <ArrowRightLeft className="h-3 w-3 text-white/25" />
-                        <p className="text-[11px] text-white/25">
-                          Powered by LI.FI Composer cross-chain routing
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </motion.div>
               )}
 
-              {/* ─── Live Activity ─── */}
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 }}
-                className="mt-8 rounded-2xl bg-[#F8F8FA] px-5 py-4"
-              >
-                <LiveFeed />
-              </motion.div>
-
-              {/* ─── How it works ─── */}
+              {/* ─── Footer — clean, confident ─── */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.55 }}
-                className="safe-bottom mt-10"
+                transition={{ delay: 0.65, duration: 1 }}
+                className="safe-bottom mt-14"
               >
-                <div className="divider mb-7" />
-                <p className="section-label mb-5 text-center">How Shift works</p>
-                <div className="flex items-start justify-between gap-2">
-                  {[
-                    { icon: "1", label: "Pick token", sub: "From your wallet" },
-                    { icon: "2", label: "We find yield", sub: "Best APY, scored" },
-                    { icon: "3", label: "One tap", sub: "Cross-chain deposit" },
-                    { icon: "4", label: "Earn 24/7", sub: "Watch it grow" },
-                  ].map((s, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 + i * 0.08 }}
-                      className="flex flex-1 flex-col items-center gap-2 text-center"
-                    >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F0F0F2] text-[13px] font-bold text-[#1D1D1F]">
-                        {s.icon}
-                      </div>
-                      <p className="text-[11px] font-semibold text-[#1D1D1F]">
-                        {s.label}
-                      </p>
-                      <p className="text-[10px] text-[#AEAEB2]">
-                        {s.sub}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
-                <div className="mt-6 flex items-center justify-center gap-2">
-                  <div className="h-px w-8 bg-[#E8E8EC]" />
-                  <p className="text-[11px] font-semibold text-[#AEAEB2]">
-                    Powered by LI.FI Earn + Composer
-                  </p>
-                  <div className="h-px w-8 bg-[#E8E8EC]" />
+                <div className="divider mb-6" />
+                <div className="flex items-center justify-center gap-8 text-[11px] font-medium text-[#AEAEB2]/50">
+                  <span>20+ protocols</span>
+                  <span>&middot;</span>
+                  <span>60+ chains</span>
+                  <span>&middot;</span>
+                  <span>LI.FI Earn</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -1966,7 +1920,7 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={() => { navigateTo("savings"); depositor.reset(); }}
-                className="mb-5 min-h-[44px] self-start rounded-xl px-3 py-2 text-[15px] font-medium text-[#34C759] transition-all hover:bg-[#34C759]/5 active:scale-[0.97]"
+                className="mb-5 min-h-[44px] self-start rounded-xl px-3 py-2 text-[15px] font-medium text-black transition-all hover:bg-black/5 active:scale-[0.97]"
               >
                 &larr; Back
               </motion.button>
@@ -1986,7 +1940,7 @@ export default function Home() {
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, ...springGentle }} className="card mt-6 !p-6">
                 <div className="flex items-center justify-between">
                   <p className="text-[14px] font-medium text-[#6E6E73]">Amount</p>
-                  <button onClick={() => setDepositAmount(parseFloat(selectedToken.balance).toFixed(4))} className="min-h-[44px] rounded-lg px-3 py-1 text-[13px] font-semibold text-[#34C759] transition-all hover:bg-[#34C759]/5">Max</button>
+                  <button onClick={() => setDepositAmount(parseFloat(selectedToken.balance).toFixed(4))} className="min-h-[44px] rounded-full bg-black px-4 py-1.5 text-[12px] font-bold text-white transition-all hover:bg-black/80 active:scale-95">MAX</button>
                 </div>
                 <div className="mt-3 flex items-center gap-4">
                   <TokenIcon symbol={selectedToken.symbol} size={52} />
@@ -1997,7 +1951,7 @@ export default function Home() {
               {/* Yield Options — the money maker */}
               {isLoadingYields && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-5 flex items-center gap-3 rounded-2xl bg-[#F8F8FA] p-5">
-                  <Loader2 className="h-5 w-5 animate-spin text-[#34C759]" />
+                  <Loader2 className="h-5 w-5 animate-spin text-black" />
                   <div>
                     <p className="text-[14px] font-medium text-[#1D1D1F]">Finding best yields...</p>
                     <p className="text-[12px] text-[#AEAEB2]">Scanning vaults across all chains + tokens</p>
@@ -2007,10 +1961,13 @@ export default function Home() {
 
               {yieldOptions.length > 0 && !isLoadingYields && (
                 <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-5 -mx-6">
-                  <p className="section-label mb-3 px-6">
-                    Yield Options {depositAmount && parseFloat(depositAmount) > 0 ? "· Live Quotes" : ""} <span className="ml-1 text-[10px] font-normal text-[#AEAEB2]">swipe →</span>
-                  </p>
-                  <div className="scroll-snap-x flex gap-3 px-6 pb-3">
+                  <div className="mb-3 flex items-center justify-between px-6">
+                    <p className="section-label">
+                      Yield Options {depositAmount && parseFloat(depositAmount) > 0 ? "· Live Quotes" : ""}
+                    </p>
+                    <ScrollArrows scrollRef={yieldScrollRef} />
+                  </div>
+                  <div ref={yieldScrollRef} className="scroll-snap-x flex gap-3 px-6 pb-3">
                     {yieldOptions
                       .filter((o) => o.quote !== null || o.isLoading || !depositAmount || parseFloat(depositAmount) <= 0)
                       .sort((a, b) => {
@@ -2034,7 +1991,7 @@ export default function Home() {
                             onClick={() => { setVault(opt.vault); setAlternatives([]); }}
                             className={`relative w-[280px] shrink-0 overflow-hidden rounded-3xl text-left transition-all ${
                               isSelected
-                                ? "bg-gradient-to-br from-[#1D1D1F] to-[#2D2D30] ring-2 ring-[#34C759]"
+                                ? "bg-black ring-2 ring-black shadow-2xl"
                                 : "card"
                             }`}
                           >
@@ -2054,11 +2011,11 @@ export default function Home() {
                                   </div>
                                 </div>
                                 {opt.isSameChain ? (
-                                  <div className={`rounded-full px-2 py-1 text-[9px] font-bold ${isSelected ? "bg-[#34C759]/20 text-[#34C759]" : "bg-[#34C759]/10 text-[#34C759]"}`}>
-                                    No fees
+                                  <div className={`rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider ${isSelected ? "bg-white/10 text-white/60" : "bg-black/5 text-black/40"}`}>
+                                    Same chain
                                   </div>
                                 ) : (
-                                  <div className={`rounded-full px-2 py-1 text-[9px] font-bold ${isSelected ? "bg-amber-500/20 text-amber-300" : "bg-amber-50 text-amber-500"}`}>
+                                  <div className={`rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider ${isSelected ? "bg-white/10 text-white/40" : "bg-amber-50 text-amber-600"}`}>
                                     Bridge
                                   </div>
                                 )}
@@ -2133,9 +2090,9 @@ export default function Home() {
 
               {/* Progress */}
               {depositor.status !== "idle" && depositor.status !== "error" && depositor.status !== "success" && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 flex items-center gap-3 rounded-2xl bg-[#34C759]/5 p-5">
-                  <Loader2 className="h-5 w-5 animate-spin text-[#34C759]" />
-                  <p className="text-[14px] font-medium text-[#34C759]">{depositor.statusMessage}</p>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 flex items-center gap-3 rounded-[20px] bg-[#F5F5F7] p-5">
+                  <Loader2 className="h-5 w-5 animate-spin text-black" />
+                  <p className="text-[14px] font-semibold text-black">{depositor.statusMessage}</p>
                 </motion.div>
               )}
 
@@ -2151,17 +2108,17 @@ export default function Home() {
                   {depositor.status !== "idle" && depositor.status !== "error" && depositor.status !== "success" ? (
                     <><Loader2 className="h-5 w-5 animate-spin" />{depositor.statusMessage}</>
                   ) : (
-                    <>Start Earning {vault ? `${vault.apy.toFixed(1)}%` : ""}<ArrowRight className="h-5 w-5" /></>
+                    <>Deposit{vault ? ` · ${vault.apy.toFixed(1)}% APY` : ""}<ArrowRight className="h-5 w-5" /></>
                   )}
                 </motion.button>
-                <p className="mt-3 text-center text-[12px] text-[#AEAEB2]">
-                  Powered by LI.FI Composer &middot; Swap + Bridge + Deposit in one tx
+                <p className="mt-4 text-center text-[11px] font-medium tracking-[0.04em] text-[#AEAEB2]/50">
+                  POWERED BY LI.FI COMPOSER
                 </p>
               </motion.div>
             </motion.div>
           )}
 
-          {/* ═══════════ EARNING — The Dopamine Machine ═══════════ */}
+          {/* ═══════════ EARNING — Zen Mode ═══════════ */}
           {view === "earning" && vault && (
             <motion.div
               key="e"
@@ -2172,33 +2129,28 @@ export default function Home() {
               exit="exit"
               className="flex flex-1 flex-col items-center justify-center"
             >
-              <ParticleField count={20} variant="organic" />
+              <ParticleField count={16} variant="organic" />
 
-              {/* Sparkle icon */}
+              {/* Minimal icon */}
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", delay: 0.2, stiffness: 200 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
                 className="relative mb-10"
               >
                 <motion.div
                   animate={{
                     boxShadow: [
-                      "0 0 0 0 rgba(52,199,89,0)",
-                      "0 0 60px 8px rgba(52,199,89,0.15)",
-                      "0 0 0 0 rgba(52,199,89,0)",
+                      "0 0 0 0 rgba(0,0,0,0)",
+                      "0 0 60px 12px rgba(0,0,0,0.15)",
+                      "0 0 0 0 rgba(0,0,0,0)",
                     ],
                   }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="flex h-16 w-16 items-center justify-center rounded-full bg-[#34C759]/10"
+                  transition={{ duration: 5, repeat: Infinity }}
+                  className="flex h-14 w-14 items-center justify-center rounded-full bg-black"
                 >
-                  <Sparkles className="h-8 w-8 text-[#34C759]" />
+                  <Sparkles className="h-6 w-6 text-white" />
                 </motion.div>
-                <motion.div
-                  animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0, 0.2] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute -inset-2 rounded-full border border-[#34C759]/15"
-                />
               </motion.div>
 
               <EarningScreen
@@ -2235,10 +2187,9 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.3 }}
-                className="mt-6 max-w-[280px] text-center text-[13px] leading-relaxed text-[#AEAEB2]"
+                className="mt-6 max-w-[260px] text-center text-[14px] leading-relaxed text-[#AEAEB2]"
               >
-                Yield accrues on-chain 24/7. Withdraw or shift to better rates
-                anytime.
+                Yield accrues 24/7. Withdraw or shift anytime.
               </motion.p>
 
               {/* Action buttons */}
@@ -2340,22 +2291,24 @@ export default function Home() {
 
               {/* Social */}
               <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 2 }}
-                className="mt-10 w-full max-w-sm space-y-5"
+                className="mt-10 w-full max-w-sm space-y-6"
               >
                 <Leaderboard userRank={47} />
-                <LiveFeed />
+                <div className="rounded-[20px] bg-[#F5F5F7] px-5 py-4">
+                  <LiveFeed />
+                </div>
               </motion.div>
 
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2.2 }}
-                className="safe-bottom mt-8 text-[11px] font-medium text-[#AEAEB2]"
+                className="safe-bottom mt-10 text-[11px] font-medium tracking-[0.05em] text-[#AEAEB2]/50"
               >
-                Powered by LI.FI Earn + Composer
+                POWERED BY LI.FI EARN + COMPOSER
               </motion.p>
             </motion.div>
           )}
